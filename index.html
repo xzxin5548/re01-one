@@ -6,9 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>智新的主页</title>
     <meta
-  name="description"
-  content="智新学习HTML制作所实践的一个小网页,仅包含一些简短的文字来进行自我介绍已经HTML的实践">
+      name="description"
+      content="智新学习HTML制作所实践的一个小网页,仅包含一些简短的文字来进行自我介绍已经HTML的实践"
+    />
     <link rel="stylesheet" href="change.css" />
+    <link rel="manifest" href="seochecker-manifest-1902.json" />
+    <link rel="icon" href="mylogo.ico">
   </head>
   <body>
     <div
@@ -19,7 +22,7 @@
         border-radius: 20px;
       "
     >
-      <img src="logo1.jpg" alt="墓土的螃蟹" width="80px" length="80px"/>
+      <img src="logo1.jpg" alt="墓土的螃蟹" width="80px" length="80px" />
     </div>
     <div
       style="
@@ -45,5 +48,12 @@
     >
       <a href="https://kangwenchang.com">友情链接</a>
     </div>
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", function () {
+          navigator.serviceWorker.register("sw.js");
+        });
+      }
+    </script>
   </body>
 </html>
