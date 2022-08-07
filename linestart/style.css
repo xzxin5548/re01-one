@@ -1,0 +1,163 @@
+* {
+  margin: 0;
+  padding: 0;
+  /* border: 1px solid #fff; */
+  font-family: "Popins", sans-serif;
+}
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  flex-direction: column;
+  background: #b6ddff;
+}
+.image {
+  background-image: url(background.jpg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.background {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  flex-direction: column;
+  z-index: 1;
+}
+.fold1 {
+  backdrop-filter: blur(7px);
+  transition: all 0.4s ease;
+  position: absolute;
+  z-index: 2;
+  opacity: 0;
+  left: 0px;
+  top: 0px;
+}
+.fold2 {
+  position: absolute;
+  z-index: 3;
+  left: 0px;
+  top: 0px;
+}
+.time {
+  user-select: none;
+  background-color: transparent;
+  width: 4em;
+  align-items: flex-end;
+  padding: 0 0 20vh 0;
+  color: rgba(0, 0, 0, 0.485);
+  font-size: 5vh;
+  text-shadow: 1.5px 1px 3px rgba(173, 173, 173, 0.814);
+  z-index: 3;
+}
+.TextBox {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+.TextBoxBarPro {
+  /* 用以撑开额外元素 */
+  display: flex;
+  height: 30vh;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.6s ease;
+}
+.TextBoxBar {
+  display: flex;
+  height: 2em;
+  width: 200px;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.5);
+  display: flex;
+  border-radius: 40px;
+  /* 背景模糊 */
+  backdrop-filter: blur(5px);
+  box-shadow: 0 0 5px 1px rgba(108, 108, 108, 0.1);
+  transition: all 0.6s ease;
+  justify-content: center;
+}
+.textBtn {
+  width: 200px;
+  font-size: 20px;
+  align-items: center;
+  text-shadow: 1px 1px 2px rgb(135, 135, 135);
+  border: none;
+  text-align: center;
+  outline: none;
+  background: inherit;
+  color: rgb(13, 13, 13);
+  transition: all 0.6s ease;
+}
+.buttonBox {
+  display: flex;
+  width: 30vh;
+  align-items: flex-end;
+  justify-content: space-between;
+  transition: all 0.6s ease;
+  opacity: 0;
+}
+.buttonBoxFold {
+  display: flex;
+  width: 40vh;
+  height: 50px;
+  position: relative;
+  top: -45px;
+  align-items: flex-end;
+  background-color: transparent;
+  justify-content: space-between;
+  transition: all 0.6s ease;
+  display: block;
+}
+.button {
+  position: relative;
+  display: block;
+  height: 40px;
+  width: 40px;
+  transition: all 0.6s ease;
+  text-align: center;
+  line-height: 40px;
+  color: #fff;
+  text-decoration: none;
+  font-size: 18px;
+  border-radius: 50px;
+  overflow: hidden;
+  opacity: 0.65;
+  box-shadow: 0 0 5px 1px rgba(108, 108, 108, 1);
+  background: linear-gradient(90deg, #0162c8, #55e7fc);
+  z-index: 3;
+}
+span {
+  position: absolute;
+  background: #fff;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  border-radius: 50%;
+  animation: animate 1s linear infinite;
+}
+.tool {
+  margin: 1vh;
+  font-size: xx-small;
+  padding: 2px;
+  background: rgba(134, 134, 134, 0.1);
+  border-radius: 40px;
+  /* 背景模糊 */
+  color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10px);
+  box-shadow: 0.5px 0.5px 2px 0.5px rgba(108, 108, 108, 0.5);
+}
+@keyframes animate {
+  0% {
+    width: 0px;
+    height: 0px;
+    opacity: 0.5;
+  }
+  100% {
+    width: 500px;
+    height: 500px;
+    opacity: 0;
+  }
+}
