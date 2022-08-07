@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ch">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>起始页test</title>
+    <meta
+      name="description"
+      content="写一个简单的浏览器起始页，记录和提醒当前最重要的事，具有时钟功能"
+    />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <!-- 写三个div叠起来 最后一层放内容，前面的用来实现背景模糊-->
+    <div class="background image"></div>
+    <div class="background fold1"></div>
+    <div class="background fold2">
+      <div class="time">Time</div>
+      <div class="TextBoxBarPro">
+        <div class="TextBoxBar">
+          <div class="TextBox">
+            <input
+              class="textBtn"
+              placeholder="现在最重要的事？"
+              id="shuRuKuang"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="buttonBox">
+        <a href="#" id="anNiu" class="button1 button">✔</a>
+        <a href="#" id="anNiu" class="button2 button">✘</a>
+      </div>
+      <div class="buttonBoxFold"></div>
+      <div>
+        <p class="tool">
+          <a
+            style="color: rgba(0, 0, 0, 0.7); font-size: xx-small"
+            href="https://xzxin5548.github.io/re01-one/"
+            >智新</a
+          >
+          HTML练手网页：起始页
+        </p>
+      </div>
+      <a class="tool" href="https://kangwenchang.com">友情链接</a>
+    </div>
+    <script type="text/javascript">
+      let youShi = false;
+      var time = document.querySelector(".time");
+      var textBtn = document.querySelector(".textBtn");
+      var fold1 = document.querySelector(".fold1");
+      var TextBoxBar = document.querySelector(".TextBoxBar");
+      var buttonBox = document.querySelector(".buttonBox");
+      var button2 = document.querySelectorAll(".button2");
+      var button1 = document.querySelectorAll(".button1");
+      var buttonBoxFold = document.querySelector(".buttonBoxFold");
+      textBtn.addEventListener("focus", function () {
+        moHu();
+      });
+      function moHu() {
+        fold1.style.opacity = "1";
+        TextBoxBar.style.width = "230px";
+        TextBoxBar.style.height = "3em";
+        buttonBox.style.opacity = "1";
+        TextBoxBar.style.background = "rgba(255, 255, 255, 0.4)";
+        buttonBoxFold.style.zIndex = "0";
+      }
+      function noMoHu() {
+        fold1.style.opacity = "0";
+        TextBoxBar.style.width = "200px";
+        TextBoxBar.style.height = "2em";
+        buttonBox.style.opacity = "0";
+        TextBoxBar.style.background = "rgba(255, 255, 255, 0.5)";
+        buttonBoxFold.style.zIndex = "4";
+      }
+      setInterval(function () {
+        var date = new Date();
+        let hh = padZero(date.getHours());
+        let mm = padZero(date.getMinutes());
+        let ss = padZero(date.getSeconds());
+        time.innerText = hh + ":" + mm + ":" + ss;
+      }, 1000);
+
+      function padZero(n) {
+        return n > 9 ? n : "0" + n;
+      }
+      // forEach() 方法用于调用数组的每个元素，并将元素传递给回调函数。
+      button1.forEach((btn) => {
+        btn.addEventListener("click", function (e) {
+          //client鼠标坐标  offsetLeft：获取元素的左侧偏移量
+          let x = e.clientX - e.target.offsetLeft;
+          let y = e.clientY - e.target.offsetTop;
+          // createElement：创建一个按钮
+          let ripples = document.createElement("span");
+          ripples.style.left = x + "px";
+          ripples.style.top = y + "px";
+          change1();
+          // appendChild：添加列表项（子节点）
+          this.appendChild(ripples);
+          setTimeout(() => {
+            ripples.remove();
+          }, 1000);
+          noMoHu();
+        });
+      });
+      // forEach() 方法用于调用数组的每个元素，并将元素传递给回调函数。
+      button2.forEach((btn) => {
+        btn.addEventListener("click", function (e) {
+          //client鼠标坐标  offsetLeft：获取元素的左侧偏移量
+          let x = e.clientX - e.target.offsetLeft;
+          let y = e.clientY - e.target.offsetTop;
+          // createElement：创建一个按钮
+          let ripples = document.createElement("span");
+          ripples.style.left = x + "px";
+          ripples.style.top = y + "px";
+          change2();
+          // appendChild：添加列表项（子节点）
+          this.appendChild(ripples);
+          setTimeout(() => {
+            ripples.remove();
+          }, 1000);
+        });
+      });
+      function change1() {
+        let shuRuKuang = document.getElementById("shuRuKuang");
+        // 只读
+        if (shuRuKuang.value !== "") {
+          shuRuKuang.readOnly = true;
+          window.localStorage.setItem("shi", shuRuKuang.value);
+        }
+      }
+      function change2() {
+        shuRuKuang.value = "";
+        // 只读
+        shuRuKuang.readOnly = false;
+        window.localStorage.removeItem("shi");
+      }
+      let data = window.localStorage.getItem("shi");
+      if (data) {
+        document.getElementById("shuRuKuang").value = data;
+        change();
+      }
+    </script>
+  </body>
+</html>
