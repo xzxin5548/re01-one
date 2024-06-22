@@ -184,10 +184,6 @@ let cams = [
 ]
 let camend =cams[1]
 let camstart=cams[1]
-
-    // 初始化激活键数组和当前相机索引
-    let activeKeys = [];
-	let currentCameraIndex = 0;
 // 获取投影矩阵的函数，用于将3D场景投影到2D屏幕上
 function getProjectionMatrix(fx, fy, width, height) {
     // 近平面和远平面的距离，用于创建视锥体
@@ -894,38 +890,12 @@ let defaultViewMatrix = [
 ];
 // 实际使用的视图矩阵
 let viewMatrix = defaultViewMatrix;
-    // 轮播标志，默认为true
-    let carousel = true;
-function changeViewAnimation(startPos, endPos, duration) {
-    console.log(111)
-    const startTime = Date.now();
-    const endTime = startTime + duration;
 
-    function animate() {
-        const currentTime = Date.now();
-        const elapsedTime = currentTime - startTime;
-        const t = Math.min(1, elapsedTime / duration); // 归一化时间，确保t在0到1之间
 
-        if (currentTime < endTime) {
-            // 更新视图矩阵
-            viewMatrix = getCameraPositionAtTime(startPos, endPos, t);
-            console.log('函数执行了 ' + elapsedTime + ' 毫秒');
-
-            // 继续动画循环
-            requestAnimationFrame(animate);
-        } else {
-            // 动画结束，设置最终的视图矩阵
-            viewMatrix = getCameraPositionAtTime(startPos, endPos, 1); // t=1 表示动画结束
-            console.log('动画完成');
-        }
-    }
-
-    // 开始动画循环
-    requestAnimationFrame(animate);
-}
 // 主函数
 async function renderer() {
-
+    // 轮播标志，默认为true
+    let carousel = true;
     // 解析URL参数
     const params = new URLSearchParams(location.search);
     try {
@@ -939,9 +909,13 @@ async function renderer() {
     const url = new URL(
         // "nike.splat",
         // location.href,
-        params.get("url") || "library.splat",
+        params.get("url") || "model.splat",
         // "https://huggingface.co/cakewalk/splat-data/resolve/main/",
-        "https://huggingface.co/zhixinxie5548/Splat-data/resolve/main/"
+        // "library.splat",
+        // "https://huggingface.co/zhixinxie5548/Splat-data/resolve/main/"
+
+        // "https://hf-mirror.com/zhixinxie5548/Splat-data/resolve/main/"
+        "https://mp-c6b0c393-d043-4458-893d-fa305217118a.cdn.bspapp.com/test/"
     );
     // 发起请求
     const req = await fetch(url, {
@@ -1170,8 +1144,36 @@ async function renderer() {
             vertexCount = e.data.vertexCount;
         }
     };
+function changeViewAnimation(startPos, endPos, duration) {
+    const startTime = Date.now();
+    const endTime = startTime + duration;
 
+    function animate() {
+        const currentTime = Date.now();
+        const elapsedTime = currentTime - startTime;
+        const t = Math.min(1, elapsedTime / duration); // 归一化时间，确保t在0到1之间
 
+        if (currentTime < endTime) {
+            // 更新视图矩阵
+            viewMatrix = getCameraPositionAtTime(startPos, endPos, t);
+            console.log('函数执行了 ' + elapsedTime + ' 毫秒');
+
+            // 继续动画循环
+            requestAnimationFrame(animate);
+        } else {
+            // 动画结束，设置最终的视图矩阵
+            viewMatrix = getCameraPositionAtTime(startPos, endPos, 1); // t=1 表示动画结束
+            console.log('动画完成');
+        }
+    }
+
+    // 开始动画循环
+    requestAnimationFrame(animate);
+}
+
+    // 初始化激活键数组和当前相机索引
+    let activeKeys = [];
+	let currentCameraIndex = 0;
     // 添加键盘按下事件监听器
     window.addEventListener("keydown", (e) => {
         // 如果按下的键不在激活键数组中，则添加进去
@@ -1837,45 +1839,9 @@ async function renderer() {
             vertexCount: Math.floor(bytesRead / rowLength),
         });
 }
-function simulateKeyPress(key) {
-    console.log("Simulating key press: " + key);
-    var event = new KeyboardEvent('keydown', {'key': key});
-    document.dispatchEvent(event);
 
-    // 如果按下的是 'P' 键，执行特定操作
-    if (key === 'P') {
-        // 这里执行按下 'P' 键后的操作，例如设置 carousel 为 true 并清空 camid 的文本内容
-        carousel = true;
-        camid.innerText = "";
-    }
-    if (key=== '0'){
-        carousel = false;
-        console.log(viewMatrix)
-        camstart = viewMatrix
-        camend = cams[0]
-        // 调用函数以3秒的持续时间开始动画
-        changeViewAnimation(camstart,camend,5000);
-    }
-        if (key=== '1'){
-        carousel = false;
-        console.log(viewMatrix)
-        camstart = viewMatrix
-        camend = cams[1]
-        // 调用函数以3秒的持续时间开始动画
-        changeViewAnimation(camstart,camend,5000);
-    }
-            if (key=== '2'){
-        carousel = false;
-        console.log(viewMatrix)
-        camstart = viewMatrix
-        camend = cams[2]
-        // 调用函数以3秒的持续时间开始动画
-        changeViewAnimation(camstart,camend,5000);
-    }
-}
 async function main(){
     await renderer()
-
 }
 // 主函数，捕获并显示错误信息
 main().catch((err) => {
