@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
-    <title>三维重建展示</title>
+    <title>测试展示</title>
     <meta charset="utf-8"/>
     <style>
         body {
@@ -33,6 +33,37 @@
             margin: 5px 0;
             font-size: small;
         }
+
+            .fixed-buttons {
+                z-index: 100;
+        position: fixed;
+        bottom: 30px;
+        left: 20px;
+    }
+            /* 大按钮样式 */
+.btn-large {
+    padding: 15px 30px; /* 按钮内边距 */
+    font-size: 18px; /* 字体大小 */
+    font-weight: bold; /* 字体加粗 */
+    color: #fff; /* 字体颜色 */
+    background-color: #007bff; /* 背景颜色 */
+    border: none; /* 无边框 */
+    border-radius: 5px; /* 边框圆角 */
+    cursor: pointer; /* 鼠标悬停时的指针形状 */
+    transition: background-color 0.3s; /* 背景颜色变化的过渡效果 */
+}
+
+/* 鼠标悬停在按钮上时的样式 */
+.btn-large:hover {
+    background-color: #0056b3; /* 鼠标悬停时的背景颜色 */
+}
+
+    .fixed-buttons button {
+        z-index: 100;
+        display: block;
+        margin-bottom: 10px;
+    }
+
 
         .cube-wrapper {
             transform-style: preserve-3d;
@@ -182,21 +213,12 @@
             font-size: x-small;
         }
 
-        body.nohf .nohf {
-            display: none;
-        }
-
-        body.nohf #progress, body.nohf .cube-face {
-            background: #ff9d0d;
-        }
     </style>
 </head>
 <body>
-<script>
-    if (location.host.includes('hf.space')) document.body.classList.add('nohf');
-</script>
+
 <div id="info">
-    <h3 class="nohf">场景示例</h3>
+    <h3 class="nohf">车辆高斯喷溅模型</h3>
     <details>
         <summary>点击这里查看指南</summary>
 
@@ -238,6 +260,12 @@
 
     </details>
 
+</div>
+<div class="fixed-buttons">
+    <button class="btn-large" onclick="simulateKeyPress('P')">P</button>
+    <button class="btn-large" onclick="simulateKeyPress('0')">0</button>
+    <button class="btn-large" onclick="simulateKeyPress('1')">1</button>
+    <button class="btn-large" onclick="simulateKeyPress('2')">2</button>
 </div>
 
 <div id="progress"></div>
