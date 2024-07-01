@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <title>三维重建展示</title>
+    <meta charset="utf-8"/>
+    <style>
+        body {
+            overflow: hidden;
+            margin: 0;
+            height: 100vh;
+            width: 100vw;
+            font-family: sans-serif;
+            background: black;
+            text-shadow: 0 0 3px black;
+        }
+
+        a, body {
+            color: white;
+        }
+
+        #info {
+            z-index: 100;
+            position: absolute;
+            top: 10px;
+            left: 15px;
+        }
+
+        h3 {
+            margin: 5px 0;
+        }
+
+        p {
+            margin: 5px 0;
+            font-size: small;
+        }
+
+        .cube-wrapper {
+            transform-style: preserve-3d;
+        }
+
+        .cube {
+            transform-style: preserve-3d;
+            transform: rotateX(45deg) rotateZ(45deg);
+            animation: rotation 2s infinite;
+        }
+
+        .cube-faces {
+            transform-style: preserve-3d;
+            height: 80px;
+            width: 80px;
+            position: relative;
+            transform-origin: 0 0;
+            transform: translateX(0) translateY(0) translateZ(-40px);
+        }
+
+        .cube-face {
+            position: absolute;
+            inset: 0;
+            background: #0017ff;
+            border: solid 1px #ffffff;
+        }
+
+        .cube-face.top {
+            transform: translateZ(80px);
+        }
+
+        .cube-face.front {
+            transform-origin: 0 50%;
+            transform: rotateY(-90deg);
+        }
+
+        .cube-face.back {
+            transform-origin: 0 50%;
+            transform: rotateY(-90deg) translateZ(-80px);
+        }
+
+        .cube-face.right {
+            transform-origin: 50% 0;
+            transform: rotateX(-90deg) translateY(-80px);
+        }
+
+        .cube-face.left {
+            transform-origin: 50% 0;
+            transform: rotateX(-90deg) translateY(-80px) translateZ(80px);
+        }
+
+        @keyframes rotation {
+            0% {
+                transform: rotateX(45deg) rotateY(0) rotateZ(45deg);
+                animation-timing-function: cubic-bezier(
+                        0.17,
+                        0.84,
+                        0.44,
+                        1
+                );
+            }
+            50% {
+                transform: rotateX(45deg) rotateY(0) rotateZ(225deg);
+                animation-timing-function: cubic-bezier(
+                        0.76,
+                        0.05,
+                        0.86,
+                        0.06
+                );
+            }
+            100% {
+                transform: rotateX(45deg) rotateY(0) rotateZ(405deg);
+                animation-timing-function: cubic-bezier(
+                        0.17,
+                        0.84,
+                        0.44,
+                        1
+                );
+            }
+        }
+
+        .scene,
+        #message {
+            position: absolute;
+            display: flex;
+            top: 0;
+            right: 0;
+            left: 0;
+            bottom: 0;
+            z-index: 2;
+            height: 100%;
+            width: 100%;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #message {
+            font-weight: bold;
+            font-size: large;
+            color: red;
+            pointer-events: none;
+        }
+
+        details {
+            font-size: small;
+
+        }
+
+        #progress {
+            position: absolute;
+            top: 0;
+            height: 5px;
+            background: blue;
+            z-index: 99;
+            transition: width 0.1s ease-in-out;
+        }
+
+        #quality {
+            position: absolute;
+            bottom: 10px;
+            z-index: 999;
+            right: 10px;
+        }
+
+        #caminfo {
+            position: absolute;
+            top: 10px;
+            z-index: 999;
+            right: 10px;
+        }
+
+        #canvas {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+        }
+
+        #instructions {
+            background: rgba(0, 0, 0, 0.6);
+            white-space: pre-wrap;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: x-small;
+        }
+
+        body.nohf .nohf {
+            display: none;
+        }
+
+        body.nohf #progress, body.nohf .cube-face {
+            background: #ff9d0d;
+        }
+    </style>
+</head>
+<body>
+<script>
+    if (location.host.includes('hf.space')) document.body.classList.add('nohf');
+</script>
+<div id="info">
+    <h3 class="nohf">场景示例</h3>
+    <details>
+        <summary>点击这里查看指南</summary>
+
+        <div id="instructions">移动（方向键）
+            - 左/右 箭头键可左右平移
+            - 上/下箭头键 前进/后退
+            - 跳跃空间
+
+            相机角度（wasd）
+            - a/d 向左/向右转动相机
+            - w/s 向上/向下倾斜相机
+            - q/e 逆时针/顺时针滚动相机
+            - i/k 和 j/l 进入轨道
+
+            触控板
+            - 上/下/左/右滚动
+            - 捏合向前/向后移动
+            - ctrl键+滚动向前/向后移动
+            - Shift + 滚动可向上/向下移动或平移
+
+            鼠标
+            - 单击并拖动到轨道
+            - 右键单击（或ctrl/cmd键）并向上/向下拖动以移动
+
+            触摸（移动）
+            - 一根手指控制
+            - 两根手指捏合向前/向后移动
+            - 两根手指旋转可顺时针/逆时针旋转相机
+            - 两根手指平移以左右和上下移动
+
+            游戏手柄
+            - 如果您连接了游戏控制器，也可以通过它来控制
+
+            其他
+            - 按 0-9 切换到预加载的摄像机视图之一
+            - 按“-”或“+”键循环加载的摄像机
+            - 按 p 恢复默认动画
+        </div>
+
+    </details>
+
+</div>
+
+<div id="progress"></div>
+
+<div id="message"></div>
+<div class="scene" id="spinner">
+    <div class="cube-wrapper">
+        <div class="cube">
+            <div class="cube-faces">
+                <div class="cube-face bottom"></div>
+                <div class="cube-face top"></div>
+                <div class="cube-face left"></div>
+                <div class="cube-face right"></div>
+                <div class="cube-face back"></div>
+                <div class="cube-face front"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<canvas id="canvas"></canvas>
+
+<div id="quality">
+    <span id="fps"></span>
+</div>
+<div id="caminfo">
+    <span id="camid"></span>
+</div>
+<script src="main.js"></script>
+</body>
+</html>
